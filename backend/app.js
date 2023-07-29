@@ -5,9 +5,15 @@ const port = 8000;
 connection();
 
 var cors = require("cors");
+var userRouter = require('./routes/user');
+var tutoRouter = require('./routes/tutorial');
+var usertutoRouter = require('./routes/userTutoR');
 app.use(cors());
 
 app.use( express.json() )
+app.use('/user',userRouter);
+app.use('/tuto',tutoRouter);
+app.use('/userTuto', usertutoRouter);
 
 app.listen(port, () => {
   console.log(
