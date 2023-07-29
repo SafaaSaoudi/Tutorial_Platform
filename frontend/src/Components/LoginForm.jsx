@@ -61,7 +61,7 @@ export default function LoginForm() {
             localStorage.setItem("role", role); // Store the user's role in local storage
 
             if (role === "admin") {
-              navigate(`/admintest/${_id}`); // Redirect to the admin dashboard if the role is admin
+              navigate(`/Admin/${_id}`); // Redirect to the admin dashboard if the role is admin
             } else {
               // Redirect to the user dashboard for any other role (default is 'user')
               navigate(`/Tuto/${_id}`);
