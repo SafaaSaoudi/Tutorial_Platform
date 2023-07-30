@@ -1,4 +1,4 @@
-const Users = require( "../models/Utilisateur" );
+const Users = require( "../models/user" );
 const bcrypt = require("bcrypt");
 exports.AjouterUtilisateur = async ( req, res ) =>
 {
