@@ -18,7 +18,7 @@ export default function Header(){
 
 
             <Box marginRight="2rem">
-              <Link to="/SignIn">Login</Link>
+              <Link to="/login">Login</Link>
             </Box>
           </Flex>
           </ChakraProvider>
