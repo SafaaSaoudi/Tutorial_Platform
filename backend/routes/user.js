@@ -6,6 +6,7 @@ var userTuto = require('../models/userTuto');
 const { Login, Logout} = require("../controllers/controllerUser")
 const { validation, loginvalidation } = require("../middleware/validator")
 const cors = require('cors');
+const resetPasswordController = require('../controllers/resetPassword');
 
 /* GET user DB. */
 router.use(cors());
@@ -67,4 +68,10 @@ router.put('/updateU/:id', function(req, res, next) {
   
 router.post("/login",loginvalidation,validation,Login)
 router.get("/logout",Logout)
+router.post('/forgot-password', resetPasswordController.sendResetPasswordEmail);
+router.post('/reset-code', resetPasswordController.handleResetPasswordCode);
+router.put("/reset-password", resetPasswordController.handleResetPasswordUpdate); 
+
+
+
 module.exports = router;
