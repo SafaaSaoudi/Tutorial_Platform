@@ -51,7 +51,7 @@ if __name__ == "__main__":
             inserted_course = html_tutorials.insert_one(course_data)
             print("Course data inserted with ID:", inserted_course.inserted_id)
     
-    # Retrieve and print the data from MongoDB
+    
     retrieved_courses = html_tutorials.find({})
     for course in retrieved_courses:
         print("Course Title:", course['title'])

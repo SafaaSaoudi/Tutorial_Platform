@@ -2,19 +2,19 @@ from pymongo import MongoClient
 import os
 import googleapiclient.discovery
 
-# Définir la clé d'API
+
 API_KEY = 'AIzaSyA-O5kajgZFSBUBDh69_cqcRgq3KsSHXww'
 
-# Créer une instance du service YouTube Data
+
 youtube = googleapiclient.discovery.build('youtube', 'v3', developerKey=API_KEY)
 
-# Effectuer une recherche de vidéos
+
 def search_videos(query):
     request = youtube.search().list(
         q=query,
         type='video',
         part='id,snippet',
-        maxResults=10  # Modifier le nombre de résultats souhaité
+        maxResults=10  
     )
     response = request.execute()
     return response.get('items', [])
@@ -22,7 +22,7 @@ def search_videos(query):
 if __name__ == "__main__":
     search_queries = ["Java programming tutorial", "Python tutorial", "Kotlin tutorial"]
     
-    # Se connecter à la base de données MongoDB
+    
     client = MongoClient('mongodb+srv://eyasomai:0000@tutoapp.ipta4hq.mongodb.net/test')
     db = client['test']
     video_collection = db['youtube_videos']
