@@ -31,6 +31,15 @@ def scrape_html_tutorial(course_url):
         print("Failed to retrieve page.")
         return None
 
+def clean_data(course_data):
+    # Nettoyer la description en enlevant les sauts de ligne, tabulations, etc.
+    if 'description' in course_data:
+        cleaned_description = course_data['description'].replace('\n', ' ').replace('\t', ' ').strip()
+        course_data['description'] = cleaned_description
+
+    # Autres étapes de nettoyage selon les besoins...
+
+    return course_data
 
 if __name__ == "__main__":
     python_tutorial_urls = [
@@ -48,9 +57,9 @@ if __name__ == "__main__":
     for url in python_tutorial_urls:
         course_data = scrape_html_tutorial(url)
         if course_data:
-            inserted_course = html_tutorials.insert_one(course_data)
+            cleaned_course_data = clean_data(course_data)
+            inserted_course = html_tutorials.insert_one(cleaned_course_data)
             print("Course data inserted with ID:", inserted_course.inserted_id)
-    
     
     retrieved_courses = html_tutorials.find({})
     for course in retrieved_courses:
