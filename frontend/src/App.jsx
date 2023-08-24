@@ -9,11 +9,12 @@ import SignUp from "./Components/User/SignUp";
 import ForgetPassword from './Components/ForgetPassword';
 import ResetPassword from './Components/ResetPassword';
 import ResetCode from './Components/ResetCode';
+import Home from './Components/Home';
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Tutorials />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/reset-code" element={<ResetCode />} />
         <Route path="/reset-password/:code" element={<ResetPassword />} />

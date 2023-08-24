@@ -99,15 +99,14 @@ export default function LoginForm() {
     <Box bg="white" minHeight="100vh" py="20px">
       <Container maxW="container.lg"  marginLeft="168" marginTop="-10px">
         <Box className="paper" p={10} shadow="lg" borderWidth="2px">
-          <Center></Center>
           <SimpleGrid columns={2} spacing={10}>
             <Box >
             
-                  {/* Image that links to /register */}
+                  
                   <Link to="/">
                     <Image
                       boxSize="25px"
-                      src={ReturnImage} // Replace with the actual path to your image
+                      src={ReturnImage} 
                       alt="Register Image"
                     />
                   </Link>
@@ -213,5 +212,7 @@ export default function LoginForm() {
     </ChakraProvider>
   );
 }
+
+
 
 

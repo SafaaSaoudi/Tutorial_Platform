@@ -4,6 +4,9 @@ import {
   ChakraProvider,
   Heading,
   Center,
+  Text,
+  Link,
+  Flex,
   SimpleGrid,
   Box,
   FormControl,
@@ -16,6 +19,7 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react";
 import SignUpimage from "../../assets/SignUpimage.png";
+import ReturnImage from "../../assets/ReturnImage.png";
 import { useState } from "react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
@@ -111,42 +115,46 @@ export default function SignUp() {
 
   return (
     <ChakraProvider>
-      <Container maxW="container.lg" marginLeft="155" marginTop="40px">
+      <Container maxW="container.lg" marginLeft="155" marginTop="10px">
         <Box className="paper" p={10} shadow="lg" borderWidth="2px">
+        
+        
           <Center></Center>
           <SimpleGrid columns={2} spacing={10}>
-            <Center>
-              <Container spacing={3}>
+               
+            <Center>      
+            <Container spacing={3} marginBottom={-10}>
                 <FormControl isRequired>
                   <FormLabel>First name</FormLabel>
                   <Input
-                    placeholder="First name"
+                    placeholder="Enter your first name"
                     onChange={(e) => setname(e.target.value)}
                   />
                 </FormControl>
-
+                
                 <FormControl isRequired>
                   <FormLabel>Last name</FormLabel>
                   <Input
-                    placeholder="Last name"
+                    placeholder="Enter your last name"
                     onChange={(e) => setlastName(e.target.value)}
                   />
                 </FormControl>
+                
                 <FormControl isRequired>
-                  <FormLabel>email</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <Input
-                    placeholder="email"
+                    placeholder="Enter your email"
                     onChange={(e) => setemail(e.target.value)}
                   />
                 </FormControl>
-
+                
                 <FormControl isRequired>
-                  <FormLabel>password</FormLabel>
+                  <FormLabel>Password</FormLabel>
                   <InputGroup size="md">
                     <Input
                       pr="4.5rem"
                       type={show ? "text" : "password"}
-                      placeholder="password"
+                      placeholder="Enter your password"
                       onChange={(e) => setpassword(e.target.value)}
                     />
                     <InputRightElement width="4.5rem">
@@ -156,7 +164,7 @@ export default function SignUp() {
                     </InputRightElement>
                   </InputGroup>
                 </FormControl>
-
+                
                 <FormControl isRequired>
                   <FormLabel>Picture</FormLabel>
                   <Input
@@ -167,19 +175,45 @@ export default function SignUp() {
                   />
                 </FormControl>
                 <br></br>
-                <Button colorScheme="green" type="submit" onClick={AddUser}>
-                  Validate
+                <Button
+                colorScheme="custom" bg="#f67325" marginLeft="150px" type="submit" onClick={AddUser}>
+                  Sign Up
                 </Button>
+                <br></br>
+                <br></br>
+                <Box textAlign="center">
+                <Flex alignItems="center">
+                <Text as="span" fontSize="md"  color="#445a67" marginLeft="70px">
+                Already have an account ?
+              </Text>
+                  <Link to="/login">
+                    <Button colorScheme="custom" color="#445a67" marginLeft="-12px">
+                      Sign In
+                    </Button>
+                  </Link>
+                </Flex>
+              </Box>
               </Container>
             </Center>
 
             <Box>
+            
+            <Link href="/">
+            <Image
+              marginLeft="-460px"
+              marginTop="-10px"
+              boxSize="25px"
+              src={ReturnImage}
+              alt="Register Image"
+            />
+          </Link>
+
               <br></br>
               <br></br>
               <Heading as="h4" size="md">
                 <Highlight
                   query="Hello"
-                  styles={{ px: "1", py: "1", rounded: "full", bg: "red.100" }}>
+                  styles={{ px: "1", py: "1", rounded: "full", bg: "#FF9A60" }}>
                   Hello,
                 </Highlight>
               </Heading>
@@ -187,17 +221,20 @@ export default function SignUp() {
               <Heading as="h4" size="md">
                 <Highlight
                   query="personal details"
-                  styles={{ rounded: "full", bg: "red.100" }}>
+                  styles={{ rounded: "full", bg: "#FF9A60" }}>
                   Enter your personal details and start journey with us
                 </Highlight>
               </Heading>
               <br></br>
+              <center>
               <Image
-                boxSize="300px"
+                boxSize="370px"
+                marginTop={'-30px'}
                 src={SignUpimage}
                 className="SignUpimage"
                 alt="React logo"
               />
+              </center>
             </Box>
           </SimpleGrid>
         </Box>
