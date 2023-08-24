@@ -25,12 +25,37 @@ def scrape_html_tutorial(course_url):
         course_data = {
             'title': title,
             'description': description,
+            'link': course_url
         }
         
         return course_data
     else:
         print("Failed to retrieve page.")
         return None
+    
+
+def clean_data(course):
+    # Mettre en place des valeurs par défaut
+    if 'title' not in course:
+        course['title'] = 'Unknown Title'
+    if 'description' not in course:
+        course['description'] = 'No Description Available'
+    if 'link' not in course:
+        course['link'] = 'No Link Available'
+    
+    # Nettoyage des caractères indésirables
+    course['title'] = ''.join(e for e in course['title'] if e.isalnum() or e.isspace())
+    course['description'] = ''.join(e for e in course['description'] if e.isalnum() or e.isspace())
+    
+    # Suppression des doublons
+    unique_words = set()
+    course['title'] = ' '.join(word for word in course['title'].split() if word not in unique_words and not unique_words.add(word))
+    course['description'] = ' '.join(word for word in course['description'].split() if word not in unique_words and not unique_words.add(word))
+    
+    # Formatage des données
+    course['title'] = course['title'].upper()
+    
+    return course
 
 if __name__ == "__main__":
     python_tutorial_urls = [
@@ -45,7 +70,7 @@ if __name__ == "__main__":
     
     client = MongoClient('mongodb+srv://eyasomai:0000@tutoapp.ipta4hq.mongodb.net/test')
     db = client['test']
-    html_tutorials = db['w3schools_tutorials']
+    html_tutorials = db['all_courses']
     
     for url in python_tutorial_urls:
         course_data = scrape_html_tutorial(url)
@@ -53,9 +78,18 @@ if __name__ == "__main__":
             inserted_course = html_tutorials.insert_one(course_data)
             print("Course data inserted with ID:", inserted_course.inserted_id)
     
+    # Data Cleaning
+    print("Starting Data Cleaning...")
     
+    for course in html_tutorials.find({}):
+        cleaned_course = clean_data(course)
+        html_tutorials.update_one({"_id": course["_id"]}, {"$set": cleaned_course})
+    
+    print("Data Cleaning completed.")
+
     retrieved_courses = html_tutorials.find({})
     for course in retrieved_courses:
         print("Course Title:", course['title'])
         print("Description:", course['description'])
+        print("Link:", course['link'])
         print("-------")
