@@ -12,6 +12,14 @@ def scrape_html_tutorial(course_url):
     response = requests.get(course_url, headers=headers)
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'html.parser')
+        link_element = soup.find('a', class_='course_btn add-course-id course_btn--shop l-but')
+        if link_element:
+            print(link_element)
+            link = link_element.get('data-href')
+        else:
+            print("Failed to find link element.")
+            return None
+        
         title_element = soup.find('h1', class_='course-title')
         if title_element:
             title = title_element.text.strip()
@@ -29,7 +37,7 @@ def scrape_html_tutorial(course_url):
         course_data = {
                 'title': title,
                 'description': description,
-                'link': course_url,
+                'link': link,
             
         }
         
@@ -38,28 +46,6 @@ def scrape_html_tutorial(course_url):
         print("Failed to retrieve page.")
         return None
 
-def clean_data(course):
-    # Mettre en place des valeurs par défaut
-    if 'title' not in course:
-        course['title'] = 'Unknown Title'
-    if 'description' not in course:
-        course['description'] = 'No Description Available'
-    if 'link' not in course:
-        course['link'] = 'No Link Available'
-    
-    # Nettoyage des caractères indésirables
-    course['title'] = ''.join(e for e in course['title'] if e.isalnum() or e.isspace())
-    course['description'] = ''.join(e for e in course['description'] if e.isalnum() or e.isspace())
-    
-    # Suppression des doublons
-    unique_words = set()
-    course['title'] = ' '.join(word for word in course['title'].split() if word not in unique_words and not unique_words.add(word))
-    course['description'] = ' '.join(word for word in course['description'].split() if word not in unique_words and not unique_words.add(word))
-    
-    # Formatage des données
-    course['title'] = course['title'].upper()
-    
-    return course
 
 if __name__ == "__main__":
     python_tutorial_urls = [
@@ -79,19 +65,3 @@ if __name__ == "__main__":
         if course_data:
             inserted_course = html_tutorials.insert_one(course_data)
             print("Course data inserted with ID:", inserted_course.inserted_id)
-    
-    # Data Cleaning
-    print("Starting Data Cleaning...")
-    
-    for course in html_tutorials.find({}):
-        cleaned_course = clean_data(course)
-        html_tutorials.update_one({"_id": course["_id"]}, {"$set": cleaned_course})
-    
-    print("Data Cleaning completed.")
-
-    retrieved_courses = html_tutorials.find({})
-    for course in retrieved_courses:
-        print("Course Title:", course['title'])
-        print("Description:", course['description'])
-        print("Link:", course['link'])
-        print("-------")
