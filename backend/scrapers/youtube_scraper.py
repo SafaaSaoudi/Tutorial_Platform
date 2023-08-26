@@ -27,7 +27,7 @@ if __name__ == "__main__":
     
     client = MongoClient('mongodb+srv://eyasomai:0000@tutoapp.ipta4hq.mongodb.net/test')
     db = client['test']
-    video_collection = db['youtube_videos']
+    video_collection = db['all_courses']
     
     for search_query in search_queries:
         print(f"Starting Data Cleaning for '{search_query}'...")
