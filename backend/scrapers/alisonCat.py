@@ -12,17 +12,41 @@ def scrape_categories(course_url):
         soup = BeautifulSoup(response.content, 'html.parser')
         categories = []
 
-        for item in soup.find_all('li'):
-            link_element = item.find('a')
-            if link_element:
-                link = link_element.get('href')
-                name = link_element.get('title')  # Use get() method with default value
-                categories.append({'name': name, 'link': link})
-
+        categories_div = soup.find('div', class_='categories')
+        if categories_div:
+            div = categories_div.find('div',class_='inner')
+            if div:
+                ul=div.find('ul')
+                if ul:
+                    for li in ul.find_all('li'):
+                        a = li.find('a')
+                        if a:
+                            link = a['href']
+                            title = a['title']
+                            course_amount = a.find('span', class_='course-amount').get_text()
+                            categories.append({'title': title, 'link': link, 'course_amount': course_amount})
         return categories
     else:
         print("Failed to retrieve page.")
         return None
+def clean_data(course):
+    # Mettre en place des valeurs par défaut
+    if 'title' not in course:
+        course['title'] = 'Unknown Title'
+    if 'link' not in course:
+        course['link'] = 'No Link Available'
+    
+    # Nettoyage des caractères indésirables
+    course['title'] = ''.join(e for e in course['title'] if e.isalnum() or e.isspace())
+    
+    # Suppression des doublons
+    unique_words = set()
+    course['title'] = ' '.join(word for word in course['title'].split() if word not in unique_words and not unique_words.add(word))
+    
+    # Formatage des données
+    course['title'] = course['title'].upper()
+    
+    return course
 
 if __name__ == "__main__":
     alison_url = "https://alison.com/fr"
@@ -35,3 +59,16 @@ if __name__ == "__main__":
     if categories_data:
         html_tutorials.insert_many(categories_data)
         print("Categories added to MongoDB.")
+    print("Starting Data Cleaning...")
+    
+    for course in html_tutorials.find({}):
+        cleaned_course = clean_data(course)
+        html_tutorials.update_one({"_id": course["_id"]}, {"$set": cleaned_course})
+    
+    print("Data Cleaning completed.")
+
+    retrieved_courses = html_tutorials.find({})
+    for course in retrieved_courses:
+        print("Course category:", course['title'])
+        print("Link:", course['link'])
+        print("-------")
