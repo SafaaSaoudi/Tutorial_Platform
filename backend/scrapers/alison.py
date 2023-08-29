@@ -2,7 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 
-
+client = MongoClient("mongodb+srv://eyasomai:0000@tutoapp.ipta4hq.mongodb.net/test")
+db = client['test']
+params = db['params']
 def scrape_html_tutorial(course_url):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
@@ -32,7 +34,20 @@ def scrape_html_tutorial(course_url):
                 'link': course_url,
             
         }
-        
+        for param in params.find():
+            name = param['name']
+            if name == 'date':
+                course_data['date'] = 'Not available'
+            elif name == 'level':
+                course_data['level'] = "Beginner"
+            elif name == 'price':
+                course_data['price'] = 'Free'
+            elif name == 'category':
+                course_data['category'] = 'Beginner'
+            elif name == 'type':
+                course_data['type'] = 'Text'
+            else:
+                course_data[name] = 'unknown'       
         return course_data
     else:
         print("Failed to retrieve page.")
@@ -91,7 +106,4 @@ if __name__ == "__main__":
 
     retrieved_courses = html_tutorials.find({})
     for course in retrieved_courses:
-        print("Course Title:", course['title'])
-        print("Description:", course['description'])
-        print("Link:", course['link'])
-        print("-------")
+         print(course)
