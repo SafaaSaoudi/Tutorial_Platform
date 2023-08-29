@@ -56,7 +56,7 @@ if __name__ == "__main__":
     client = MongoClient('mongodb+srv://eyasomai:0000@tutoapp.ipta4hq.mongodb.net/test')
     db = client['test']
     video_collection = db['all_courses']
-    
+    params = db['params']
     for search_query in search_queries:
         print(f"Starting Data Cleaning for '{search_query}'...")
         videos = search_videos(search_query)
@@ -84,7 +84,21 @@ if __name__ == "__main__":
                     'duration': formatted_duration,
                     'upload_date': upload_date,
                 }
-                
+                for param in params.find():
+                    name = param['name']
+                    if name == 'date':
+                        video_data['date'] = 'Not available'
+                    elif name == 'level':
+                        video_data['level'] = "Mixed"
+                    elif name == 'price':
+                        video_data['price'] = 'Free'
+                    elif name == 'category':
+                        video_data['category'] = 'IT'
+                    elif name == 'type':
+                        video_data['type'] = 'Video'
+                    else:
+                        video_data[name] = 'unknown'
+
                 inserted_video = video_collection.insert_one(video_data)
                 
                 print("Video Title:", cleaned_title)
