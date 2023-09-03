@@ -63,6 +63,15 @@ export default function Tutorials() {
             <button
               className="btn btn-sm btn-primary"
               onClick={toggleDescription}
+              style={{
+                display: 'block',
+                marginRight: '-10px',
+                backgroundColor: '#445a67',
+                color: '#fff',
+                borderColor: '#445a67',
+                fontSize: '0.75rem', // Taille de police plus petite
+                padding: '0.2rem 0.5rem', // Rembourrage plus petit
+              }}
             >
               {showFullDescription ? "Read Less" : "Read More"}
             </button>
@@ -104,7 +113,14 @@ export default function Tutorials() {
                       <h5 className="card-title">{t.title}</h5>
                       <DescriptionPreview description={t.description} maxChars={100} />
                       <a href={t.link}>{t.link}</a>                      
-                      <button className="btn btn-warning" onClick={() => handleAddTutorial(t)}>Add</button>
+                      <button className="btn btn-warning" style={{
+                        backgroundColor: '#f67325',
+                        color: '#fff',
+                        borderColor: '#f67325',
+                        display: 'block',
+                        marginTop: '20px'
+                      }} 
+                      onClick={() => handleAddTutorial(t)}>Add</button>
                     </div>
                   </div>
                 </div>

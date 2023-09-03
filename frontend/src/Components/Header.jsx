@@ -62,9 +62,9 @@ export default function Header() {
             </ul>
           </div>
           <div className="d-flex align-items-center">
-            <a href="http://127.0.0.1:5173/login" className="btn btn-outline-soft d-none d-md-inline mr-md-3 animate-up-2">Sign In</a>
+          
 
-            <a href="http://127.0.0.1:5173/SignUp" className="btn btn-md btn-tertiary text-white d-none d-md-inline animate-up-2">Sign Up</a>
+            <a href="http://127.0.0.1:5173/login" className="btn btn-md btn-tertiary text-white d-none d-md-inline animate-up-2">Log Out</a>
             <button className="navbar-toggler ml-2" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>

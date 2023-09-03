@@ -66,11 +66,22 @@ const handleAddTutorial = async (tutorial) => {
           <p>{showFullDescription ? description : description.slice(0, maxChars)}</p>
           {description.length > maxChars && (
             <button
-              className="btn btn-sm btn-primary"
-              onClick={toggleDescription}
-            >
-              {showFullDescription ? "Read Less" : "Read More"}
-            </button>
+            className="btn btn-primary"
+            onClick={toggleDescription}
+            style={{
+              display: 'block',
+              marginRight: '-10px',
+              backgroundColor: '#445a67',
+              color: '#fff',
+              borderColor: '#445a67',
+              fontSize: '0.75rem', // Taille de police plus petite
+              padding: '0.2rem 0.5rem', // Rembourrage plus petit
+            }}
+          >
+            {showFullDescription ? "Read Less" : "Read More"}
+          </button>
+          
+
           )}
         </div>
       </div>
@@ -100,11 +111,25 @@ const handleAddTutorial = async (tutorial) => {
               {tutorials.map(t => (
                 <div key={t._id} className="col-md-4 mb-4">
                   <div className="card">
-                    <div className="card-body">
+                    <div className="card-body" >
                       <h5 className="card-title">{t.title}</h5>
                       <DescriptionPreview description={t.description} maxChars={100} />
                       <a href={t.link}>{t.link}</a>                      
-                      <button className="btn btn-warning" onClick={() => handleAddTutorial(t)}>Add</button>
+                      <button
+  className="btn btn-warning"
+  onClick={() => handleAddTutorial(t)}
+  style={{
+    backgroundColor: '#f67325',
+    color: '#fff',
+    borderColor: '#f67325',
+    display: 'block',
+    marginTop: '20px'
+  }}
+>
+  Add
+</button>
+
+                    
                     </div>
                   </div>
                 </div>

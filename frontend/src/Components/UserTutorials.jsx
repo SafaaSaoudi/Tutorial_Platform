@@ -71,7 +71,14 @@ export default function UserTutorials() {
                       <h5 className="card-title">{t.tutorial.title}</h5>
                       <h5>{t.tutorial.description}</h5>
                       <a href={t.link}>{t.link}</a>                      
-                      <button className="btn btn-warning" onClick={() => handleDeleteTutorial(t._id)}>Delete</button>
+                      <button className="btn btn-warning" style={{
+                        backgroundColor: '#f67325',
+                        color: '#fff',
+                        borderColor: '#f67325',
+                        display: 'block',
+                        marginTop: '20px'
+                      }}
+                      onClick={() => handleDeleteTutorial(t._id)}>Delete</button>
                     </div>
                   </div>
                 </div>
