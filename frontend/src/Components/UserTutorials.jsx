@@ -1,13 +1,10 @@
-import { ChakraProvider } from '@chakra-ui/react';
 import { useEffect, useState } from "react";
-import { Card, CardBody, Heading, Text, Wrap } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import Header from './Header';
 
 export default function UserTutorials() {
   const [ututorials, setUTutorials] = useState([]);
   const { _id } = useParams(); // Get the user ID from the URL
-
   const fetchTutos = async () => {
     try {
       const response = await fetch(`http://127.0.0.1:8000/userTuto/getUTT/${_id}`);
@@ -27,27 +24,8 @@ export default function UserTutorials() {
     fetchTutos();
   }, [_id]);
 
-  const DescriptionPreview = ({ description, maxChars }) => {
-    const [showFullDescription, setShowFullDescription] = useState(false);
 
-    return (
-      <div>
-        {showFullDescription ? (
-          <>
-            <Text>{description}</Text>
-            <button onClick={() => setShowFullDescription(false)}>Read Less</button>
-          </>
-        ) : (
-          <>
-            <Text>{description.slice(0, maxChars)}</Text>
-            {description.length > maxChars && (
-              <button onClick={() => setShowFullDescription(true)}>Read More</button>
-            )}
-          </>
-        )}
-      </div>
-    );
-  };
+
 
   const handleDeleteTutorial = async (UtutorialId) => {
     try {
@@ -67,42 +45,41 @@ export default function UserTutorials() {
   };
 
   return (
-    <ChakraProvider>
-      <Header />
-      <Wrap spacing='24px'>
-        {ututorials.length > 0 && (
-          <>
-            {ututorials.map(ut => (
-              <Card key={ut._id} maxW='sm'>
-                <CardBody>
-                  <Heading size='md'>{ut.tutorial.metadata.titre}</Heading>
-                  <DescriptionPreview description={ut.tutorial.metadata.description} maxChars={100} />
-                  {/* Rest of the card content */}
-                  <Text color='blue.600' fontSize='2xl'>
-                    {ut.tutorial.metadata.difficulty}
-                  </Text>
-                  <Text color='blue.600' fontSize='2xl'>
-                    {ut.tutorial.metadata.vidéo}
-                  </Text>
-                  <Text color='blue.600' fontSize='2xl'>
-                    {ut.tutorial.metadata.difficulty}
-                  </Text>
-                  <Text color='blue.600' fontSize='2xl'>
-                    {ut.tutorial.metadata.code_source}
-                  </Text>
-                  <Text color='blue.600' fontSize='2xl'>
-                    {ut.tutorial.metadata.payant}
-                  </Text>
-                  <Text color='blue.600' fontSize='2xl'>
-                    {ut.tutorial.metadata.ressources}
-                  </Text>
-                  <button onClick={() => handleDeleteTutorial(ut._id)}>Delete</button>
-                </CardBody>
-              </Card>
-            ))}
-          </>
-        )}
-      </Wrap>
-    </ChakraProvider>
+    <div>
+      <Header/>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+
+      <div className="container mt-4">
+      <div className="text-center">
+          <h2 className="text-secondary">Available Tutorials</h2>
+          
+        </div>   
+        <br></br>
+        <br></br>
+        <br></br> 
+        <div className="row">
+          {ututorials.length > 0 && (
+            <>
+              {ututorials.map(t => (
+                <div key={t._id} className="col-md-4 mb-4">
+                  <div className="card">
+                    <div className="card-body">
+                      <h5 className="card-title">{t.tutorial.title}</h5>
+                      <h5>{t.tutorial.description}</h5>
+                      <a href={t.link}>{t.link}</a>                      
+                      <button className="btn btn-warning" onClick={() => handleDeleteTutorial(t._id)}>Delete</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

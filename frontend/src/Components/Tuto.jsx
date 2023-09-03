@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Card, CardBody, Heading, Text, Wrap } from '@chakra-ui/react';
+import {Text } from '@chakra-ui/react';
 import axios from 'axios'; // Import axios
-import { useParams,Link } from 'react-router-dom';
-import { ChakraProvider } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
 import Header from "./Header";
 export default function Tuto() {
   
@@ -53,68 +52,68 @@ const handleAddTutorial = async (tutorial) => {
     fetchTutorials();
   }, []);
 
-    const DescriptionPreview = ({ description, maxChars }) => {
+  const DescriptionPreview = ({ description, maxChars }) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
+  
+    const toggleDescription = () => {
+      setShowFullDescription(!showFullDescription);
+    };
+  
 
     return (
       <div>
-        {showFullDescription ? (
-          <>
-            <Text>{description}</Text>
-            <button onClick={() => setShowFullDescription(false)}>Read Less</button>
-          </>
-        ) : (
-          <>
-            <Text>{description.slice(0, maxChars)}</Text>
-            {description.length > maxChars && (
-              <button onClick={() => setShowFullDescription(true)}>Read More</button>
-            )}
-          </>
-        )}
+        <div className="d-flex justify-content-between align-items-center">
+          <p>{showFullDescription ? description : description.slice(0, maxChars)}</p>
+          {description.length > maxChars && (
+            <button
+              className="btn btn-sm btn-primary"
+              onClick={toggleDescription}
+            >
+              {showFullDescription ? "Read Less" : "Read More"}
+            </button>
+          )}
+        </div>
       </div>
     );
   };
 
   return (
-    <ChakraProvider>
-      <Header></Header>
-    <Wrap spacing='24px'>
-        
-      {tutorials.length > 0 && (
-        <>
-          {tutorials.map(t => (
-            <Card key={t._id} maxW='sm'>
-              <CardBody>
-                <Heading size='md'>{t.metadata.titre}</Heading>
-                  <DescriptionPreview description={t.metadata.description} maxChars={100} />
-                <Text>{t.metadata.durée}</Text>
-                <Text color='blue.600' fontSize='2xl'>
-                  {t.metadata.difficulty}
-                </Text>
-                <Text color='blue.600' fontSize='2xl'>
-                  {t.metadata.vidéo}
-                </Text>
-                <Text color='blue.600' fontSize='2xl'>
-                  {t.metadata.difficulty}
-                </Text>
-                <Text color='blue.600' fontSize='2xl'>
-                  {t.metadata.code_source}
-                </Text>
-                <Text color='blue.600' fontSize='2xl'>
-                  {t.metadata.payant}
-                </Text>
-                <Text color='blue.600' fontSize='2xl'>
-                  {t.metadata.ressources}
-                </Text>
-                <button onClick={() => handleAddTutorial(t)}>Add</button><br></br>
-                <Link to={`/UserTutorials/${_id}`}>historic</Link>
-              </CardBody>
-            </Card>
-          ))}
-        </>
-      )}
-    </Wrap>
-    </ChakraProvider>
+    <div>
+      <Header/>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
 
+      <div className="container mt-4">
+      <div className="text-center">
+          <h2 className="text-secondary">Available Tutorials</h2>
+          
+        </div>   
+        <br></br>
+        <br></br>
+        <br></br> 
+            <div className="row">
+          {tutorials.length > 0 && (
+            <>
+              {tutorials.map(t => (
+                <div key={t._id} className="col-md-4 mb-4">
+                  <div className="card">
+                    <div className="card-body">
+                      <h5 className="card-title">{t.title}</h5>
+                      <DescriptionPreview description={t.description} maxChars={100} />
+                      <a href={t.link}>{t.link}</a>                      
+                      <button className="btn btn-warning" onClick={() => handleAddTutorial(t)}>Add</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+      </div>
+
+    </div>
   );
 }

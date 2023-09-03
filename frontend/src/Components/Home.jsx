@@ -1,4 +1,3 @@
-import React from 'react';
 import logoLight from '../assets/img/light.svg';
 import logoDark from '../assets/img/dark.svg';
 import sceneIllustration from '../assets/1.png';
@@ -42,8 +41,8 @@ import '../assets/css/swipe.css';
                 </div>
                 <ul className="navbar-nav navbar-nav-hover align-items-lg-center">
                     <li className="nav-item">
-                        <a href="#about" className="nav-link">
-                            About
+                        <a href="http://127.0.0.1:5173/Tutorials" className="nav-link">
+                            Tutorials
                         </a>
                     </li>
                     <li className="nav-item">

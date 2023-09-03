@@ -1,131 +1,134 @@
 import { useEffect, useState } from "react";
-import { Card, CardBody, Heading, Text, Wrap } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
-import { ChakraProvider } from '@chakra-ui/react';
 import Header from './Header';
+
 export default function Tutorials() {
   const [tutorials, setTutorials] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [tutorialsPerPage] = useState(50); // Updated to display 50 tutorials per page
   const isAuthenticated = false; // Replace this with your actual authentication check (from local storage, Redux, etc.)
 
- const fetchTutorials = async () => {
-  try {
-    console.log("Fetching tutorials...");
-    const response = await fetch("http://127.0.0.1:8000/tuto/getT");
-    console.log("Response status:", response.status);
-    
-    if (!response.ok) {
-      console.error("Failed to fetch tutorials.");
-      return;
+  const fetchTutorials = async () => {
+    try {
+      console.log("Fetching tutorials...");
+      const response = await fetch("http://localhost:8000/tuto/getT");
+      console.log("Response status:", response.status);
+
+      if (!response.ok) {
+        console.error("Failed to fetch tutorials.");
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Data received:", data);
+      setTutorials(data);
+    } catch (error) {
+      console.error("An error occurred while fetching tutorials:", error);
     }
-    
-    const data = await response.json();
-    console.log("Data received:", data);
-    setTutorials(data);
-  } catch (error) {
-    console.error("An error occurred while fetching tutorials:", error);
-  }
-}
-
-/*const handleAddTutorial = async (tutorial) => {
-  try {
-    // Make a POST request to the backend API to add the tutorial to userTutorials
-    const response = await axios.post('http://127.0.0.1:3000/userTuto/addUT', {
-      utilisateurId: '64c04c705d6e761b1c744da4', // Replace with the user ID of the current user
-      tutorialId: tutorial._id
-    });
-
-    // Handle the response if needed (e.g., show a success message)
-    console.log(response.data); // Response from the server
-
-    // Update the state of userTutorials if needed
-    // setUserTutorials((prevTutorials) => [...prevTutorials, tutorial]);
-  } catch (error) {
-    console.error("An error occurred while adding the tutorial:", error);
-  }
-};*/
-
-const handleAddTutorial = async () => {
-  if (!isAuthenticated) {
-    // If the user is not authenticated, do nothing or display a message.
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'login first',
-    });// Or you can show a message to prompt the user to log in
   }
 
- 
-};
+  // Calculate the indexes of the tutorials to be displayed on the current page
+  const indexOfLastTutorial = currentPage * tutorialsPerPage;
+  const indexOfFirstTutorial = indexOfLastTutorial - tutorialsPerPage;
+  const currentTutorials = tutorials.slice(indexOfFirstTutorial, indexOfLastTutorial);
 
-
+  const handleAddTutorial = async () => {
+    if (!isAuthenticated) {
+      // If the user is not authenticated, do nothing or display a message.
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Login first',
+      }); // Or you can show a message to prompt the user to log in
+    }
+  };
 
   useEffect(() => {
     fetchTutorials();
   }, []);
 
-    const DescriptionPreview = ({ description, maxChars }) => {
+  const DescriptionPreview = ({ description, maxChars }) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
+  
+    const toggleDescription = () => {
+      setShowFullDescription(!showFullDescription);
+    };
+  
 
     return (
       <div>
-        {showFullDescription ? (
-          <>
-            <Text>{description}</Text>
-            <button onClick={() => setShowFullDescription(false)}>Read Less</button>
-          </>
-        ) : (
-          <>
-            <Text>{description.slice(0, maxChars)}</Text>
-            {description.length > maxChars && (
-              <button onClick={() => setShowFullDescription(true)}>Read More</button>
-            )}
-          </>
-        )}
+        <div className="d-flex justify-content-between align-items-center">
+          <p>{showFullDescription ? description : description.slice(0, maxChars)}</p>
+          {description.length > maxChars && (
+            <button
+              className="btn btn-sm btn-primary"
+              onClick={toggleDescription}
+            >
+              {showFullDescription ? "Read Less" : "Read More"}
+            </button>
+          )}
+        </div>
       </div>
     );
   };
+  
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
- 
-    <ChakraProvider>
-      <Header></Header>
-    <Wrap spacing='24px'>
-{!isAuthenticated}      {tutorials.length > 0 && (
-        <>
-          {tutorials.map(t => (
-         
-            <Card key={t._id} maxW='sm'>
-            <CardBody>
-              <Heading size='md'>{t.metadata.titre}</Heading>
-                  <DescriptionPreview description={t.metadata.description} maxChars={100} />
-              <Text>{t.metadata.durée}</Text>
-              <Text color='blue.600' fontSize='2xl'>
-                {t.metadata.difficulty}
-              </Text>
-              <Text color='blue.600' fontSize='2xl'>
-                {t.metadata.vidéo}
-              </Text>
-              <Text color='blue.600' fontSize='2xl'>
-                {t.metadata.difficulty}
-              </Text>
-              <Text color='blue.600' fontSize='2xl'>
-                {t.metadata.code_source}
-              </Text>
-              <Text color='blue.600' fontSize='2xl'>
-                {t.metadata.payant}
-              </Text>
-              <Text color='blue.600' fontSize='2xl'>
-                {t.metadata.ressources}
-              </Text>
-              <button onClick={() => handleAddTutorial(t)}>Add</button>
-            </CardBody>
-          </Card>
-          ))}
-        </>
-      )}
-    </Wrap>
-    </ChakraProvider>
-    
-  );
+    <div>
+      <Header/>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
 
-          }
+      <div className="container mt-4">
+      <div className="text-center">
+          <h2 className="text-secondary">Available Tutorials</h2>
+          
+        </div>   
+        <br></br>
+        <br></br>
+        <br></br> 
+            <div className="row">
+          {currentTutorials.length > 0 && (
+            <>
+              {currentTutorials.map(t => (
+                <div key={t._id} className="col-md-4 mb-4">
+                  <div className="card">
+                    <div className="card-body">
+                      <h5 className="card-title">{t.title}</h5>
+                      <DescriptionPreview description={t.description} maxChars={100} />
+                      <a href={t.link}>{t.link}</a>                      
+                      <button className="btn btn-warning" onClick={() => handleAddTutorial(t)}>Add</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+      </div>
+      <div className="container mt-4">
+        {tutorials.length > tutorialsPerPage && (
+          <ul className="pagination">
+            {Array.from({ length: Math.ceil(tutorials.length / tutorialsPerPage) }, (_, index) => (
+              <li className="page-item" key={index + 1}>
+                <button
+                  className={`page-link ${currentPage === index + 1 ? "active" : ""}`}
+                  onClick={() => paginate(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}

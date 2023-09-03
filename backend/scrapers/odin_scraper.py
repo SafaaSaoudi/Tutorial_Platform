@@ -6,12 +6,13 @@ import re
 client = MongoClient('mongodb+srv://eyasomai:0000@tutoapp.ipta4hq.mongodb.net/test')
 db = client['test']
 all_courses = db['all_courses']
+params = db['params']
 
 url_js = 'https://www.theodinproject.com/paths/full-stack-javascript'
 url_ruby = 'https://www.theodinproject.com/paths/full-stack-ruby-on-rails'
 
 def clean_data(course):
-    print("Starting Data Cleaning...")
+    
     
     # Mettre en place des valeurs par défaut
     if 'title' not in course:
@@ -33,7 +34,7 @@ def clean_data(course):
     # Formatage des données
     course['title'] = course['title'].upper()
     
-    print("Data Cleaning completed.")
+    
     
     return course
 
@@ -49,10 +50,7 @@ def odin_scraper(url):
         description_element = div.find('p', class_='prose prose-gray dark:prose-invert max-w-none')
         description = description_element.text.strip() if description_element else ''
         
-        print("Title:", title)
-        print("URL:", link)
-        print("Description:", description)
-        print("-" * 50)
+    
         
         course_data = {
             'title': title,
@@ -60,12 +58,27 @@ def odin_scraper(url):
             'description': description,
         }
         
+        for param in params.find():
+            name = param['name']
+            if name == 'date':
+                course_data['date'] = 'Not available'
+            elif name == 'level':
+                course_data['level'] = "Hard"
+            elif name == 'price':
+                course_data['price'] = 'Free'
+            elif name == 'category':
+                course_data['category'] = 'IT'
+            elif name == 'type':
+                course_data['type'] = 'Text'
+            else:
+                course_data[name] = 'unknown'
+
+        
         cleaned_course = clean_data(course_data)
         
         result = all_courses.insert_one(cleaned_course)
         
-        print(f"Added Course: {cleaned_course['title']}\nLink: {cleaned_course['link']}\nDescription: {cleaned_course['description']}\n")
-        print("Insertion result:", result)
+       
 
 odin_scraper(url_js)
 odin_scraper(url_ruby)

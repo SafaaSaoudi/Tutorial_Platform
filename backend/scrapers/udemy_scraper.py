@@ -4,6 +4,7 @@ from pymongo import MongoClient
 
 client = MongoClient("mongodb+srv://eyasomai:0000@tutoapp.ipta4hq.mongodb.net/test")
 db = client['test']
+params = db['params']
 all_courses = db['all_courses']
 
 url = "https://www.udemy.com/courses/"
@@ -41,7 +42,20 @@ for card in category_cards:
             'title': title,
             'link': 'https://www.udemy.com' + link,
         }
-        
+        for param in params.find():
+            name = param['name']
+            if name == 'date':
+                course_data['date'] = 'Not available'
+            elif name == 'level':
+                course_data['level'] = "Mixed"
+            elif name == 'price':
+                course_data['price'] = 'Free & Paid Courses'
+            elif name == 'category':
+                course_data['category'] = 'Mixed'
+            elif name == 'type':
+                course_data['type'] = 'Text & Video'
+            else:
+                course_data[name] = 'unknown'       
         cleaned_course = clean_data(course_data)
         
         result = all_courses.insert_one(cleaned_course)

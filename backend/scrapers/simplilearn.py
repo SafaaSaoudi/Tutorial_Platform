@@ -6,6 +6,7 @@ import re
 client = MongoClient("mongodb+srv://eyasomai:0000@tutoapp.ipta4hq.mongodb.net/test")
 db = client['test']
 all_courses = db['all_courses']
+params = db['params']
 
 url_js = [
     'https://www.simplilearn.com/resources/cloud-computing/tutorials',
@@ -63,12 +64,25 @@ def parse(url):
             'description': description,
             'link': technology_href
         }
-        
+        for param in params.find():
+            name = param['name']
+            if name == 'date':
+                course_data['date'] = 'Not available'
+            elif name == 'level':
+                course_data['level'] = "Beginner"
+            elif name == 'price':
+                course_data['price'] = 'Free'
+            elif name == 'category':
+                course_data['category'] = 'Beginner'
+            elif name == 'type':
+                course_data['type'] = 'Text & videos'
+            else:
+                course_data[name] = 'unknown'       
+ 
         cleaned_course = clean_data(course_data)
         result = all_courses.insert_one(cleaned_course)
         
-        print(f"Added Course: {cleaned_course['title']}\nImage Link: {cleaned_course['imageLink']}\nDescription: {cleaned_course['description']}\nLink: {cleaned_course['link']}\n")
-        print("Insertion result:", result)
+        print("Insertion result:", course_data)
 
 print("Starting Web Scraping...")
 

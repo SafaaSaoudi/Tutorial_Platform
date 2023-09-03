@@ -71,4 +71,4 @@ if __name__ == "__main__":
     for course in retrieved_courses:
         print("Course category:", course['title'])
         print("Link:", course['link'])
-        print("-------")
+        print("-----")

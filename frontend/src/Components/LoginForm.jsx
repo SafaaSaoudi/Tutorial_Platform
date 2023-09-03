@@ -17,7 +17,6 @@ import {
   InputRightElement,
   useToast, // Import useToast from @chakra-ui/react
 } from "@chakra-ui/react";
-import * as React from "react";
 import { useState } from "react";
 import axios from "axios";
 import SignInimage from "../assets/SignInImage.png"; 
@@ -101,8 +100,6 @@ export default function LoginForm() {
         <Box className="paper" p={10} shadow="lg" borderWidth="2px">
           <SimpleGrid columns={2} spacing={10}>
             <Box >
-            
-                  
                   <Link to="/">
                     <Image
                       boxSize="25px"

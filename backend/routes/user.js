@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
-var Tutorial = require('../models/tutorial');
 var userTuto = require('../models/userTuto');
 const { Login, Logout} = require("../controllers/controllerUser")
 const { validation, loginvalidation } = require("../middleware/validator")

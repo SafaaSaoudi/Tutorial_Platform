@@ -1,7 +1,6 @@
 import UserTutorials from './Components/UserTutorials';
 import Tutorials from './Components/Tutorials';
 import { Route, Routes } from 'react-router-dom';
-import Hello from './Components/Hello';
 import Admin from './Components/Admin';
 import LoginForm from './Components/LoginForm';
 import Tuto from './Components/Tuto';

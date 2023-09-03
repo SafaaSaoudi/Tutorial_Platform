@@ -9,7 +9,7 @@ var UserTutorial = new Schema({
   },
   tutorial: {
     type: Schema.Types.ObjectId,
-    ref: 'tutorials'
+    ref: 'all_courses'
   }
 });
 

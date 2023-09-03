@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var Tutorial = require('../models/tutorial');
+var Courses = require('../models/all_courses');
 const cors = require('cors');
 
 /* GET user DB. */
 router.use(cors());
 
 router.get('/getT',async function(req, res, next) {
-    await Tutorial.find()
+    await Courses.find()
       .then(data => {
         res.json(data);
       })
@@ -34,15 +34,16 @@ router.get('/getT',async function(req, res, next) {
 
 /* POST 2*/
 router.post('/addT', function(req,res,next) {
-    new Tutorial(
-        {metadata:req.body.metadata, 
+    new Courses(
+        {title:req.body.title, 
+          description:req.body.description
         }
         ).save();
     res.send("Added");
 });
 /* Delete user*/
 router.post('/deleteT/:id', function(req,res,next){
-    Tutorial.findByIdAndRemove(req.params.id, 
+  Courses.findByIdAndRemove(req.params.id, 
         function (err, docs) {
         if (err)
             console.log(err);
@@ -53,10 +54,11 @@ router.post('/deleteT/:id', function(req,res,next){
 /*update user*/
 router.put('/updateT/:id', function(req, res, next) {
     const updatedTuto = {
-        metadata:req.body.metadata, 
+      title:req.body.title, 
+      description:req.body.description 
     };
   
-    Tutorial.findByIdAndUpdate(req.params.id, updateData, { new: true }, (err, updatedUser) => {
+    Courses.findByIdAndUpdate(req.params.id, updateData, { new: true }, (err, updatedUser) => {
       if (err) {
         console.error(err);
         // Handle the error
