@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import Swal from 'sweetalert2';
-import Header from './Header';
+import Swal from "sweetalert2";
+import Header from "./Header";
 
 export default function Tutorials() {
   const [tutorials, setTutorials] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [tutorialsPerPage] = useState(50); // Updated to display 50 tutorials per page
-  const isAuthenticated = false; // Replace this with your actual authentication check (from local storage, Redux, etc.)
+  const [tutorialsPerPage] = useState(50);
+  const indexOfLastTutorial = currentPage * tutorialsPerPage;
+  const indexOfFirstTutorial = indexOfLastTutorial - tutorialsPerPage;
+  const currentTutorials = tutorials.slice(indexOfFirstTutorial, indexOfLastTutorial);
 
+  const isAuthenticated = false;
   const fetchTutorials = async () => {
     try {
       console.log("Fetching tutorials...");
@@ -25,28 +28,7 @@ export default function Tutorials() {
     } catch (error) {
       console.error("An error occurred while fetching tutorials:", error);
     }
-  }
-
-  // Calculate the indexes of the tutorials to be displayed on the current page
-  const indexOfLastTutorial = currentPage * tutorialsPerPage;
-  const indexOfFirstTutorial = indexOfLastTutorial - tutorialsPerPage;
-  const currentTutorials = tutorials.slice(indexOfFirstTutorial, indexOfLastTutorial);
-
-  const handleAddTutorial = async () => {
-    if (!isAuthenticated) {
-      // If the user is not authenticated, do nothing or display a message.
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Login first',
-      }); // Or you can show a message to prompt the user to log in
-    }
   };
-
-  useEffect(() => {
-    fetchTutorials();
-  }, []);
-
   const DescriptionPreview = ({ description, maxChars }) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
   
@@ -54,24 +36,17 @@ export default function Tutorials() {
       setShowFullDescription(!showFullDescription);
     };
   
-
+    // Check if description is defined before using slice
+    const truncatedDescription = description ? description.slice(0, maxChars) : "";
+  
     return (
       <div>
         <div className="d-flex justify-content-between align-items-center">
-          <p>{showFullDescription ? description : description.slice(0, maxChars)}</p>
-          {description.length > maxChars && (
+          <p>{showFullDescription ? description : truncatedDescription}</p>
+          {description && description.length > maxChars && (
             <button
               className="btn btn-sm btn-primary"
               onClick={toggleDescription}
-              style={{
-                display: 'block',
-                marginRight: '-10px',
-                backgroundColor: '#445a67',
-                color: '#fff',
-                borderColor: '#445a67',
-                fontSize: '0.75rem', // Taille de police plus petite
-                padding: '0.2rem 0.5rem', // Rembourrage plus petit
-              }}
             >
               {showFullDescription ? "Read Less" : "Read More"}
             </button>
@@ -80,55 +55,74 @@ export default function Tutorials() {
       </div>
     );
   };
-  
 
+  const handleAddTutorial = async () => {
+    if (!isAuthenticated) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Login first",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchTutorials();
+  }, []);
+  const renderAttribute = (tutorial, attributeKey) => {
+    // Check if the attribute exists in the tutorial data
+    if (tutorial.hasOwnProperty(attributeKey) && tutorial[attributeKey]) {
+      return (
+        <div key={attributeKey}>
+          <strong>{attributeKey}: </strong>
+          {tutorial[attributeKey]}
+        </div>
+      );
+    }
+    return null; // Return null if the attribute doesn't exist or is falsy
+  };
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
   return (
     <div>
-      <Header/>
+      <Header />
       <br></br>
       <br></br>
       <br></br>
       <br></br>
       <br></br>
-
       <div className="container mt-4">
-      <div className="text-center">
-          <h2 className="text-secondary">Available Tutorials</h2>
-          
-        </div>   
-        <br></br>
-        <br></br>
-        <br></br> 
-            <div className="row">
-          {currentTutorials.length > 0 && (
-            <>
-              {currentTutorials.map(t => (
-                <div key={t._id} className="col-md-4 mb-4">
-                  <div className="card">
-                    <div className="card-body">
-                      <h5 className="card-title">{t.title}</h5>
-                      <DescriptionPreview description={t.description} maxChars={100} />
-                      <a href={t.link}>{t.link}</a>                      
-                      <button className="btn btn-warning" style={{
-                        backgroundColor: '#f67325',
-                        color: '#fff',
-                        borderColor: '#f67325',
-                        display: 'block',
-                        marginTop: '20px'
-                      }} 
-                      onClick={() => handleAddTutorial(t)}>Add</button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
+  <div className="text-center">
+    <h2 className="text-secondary">Available Tutorials</h2>
+  </div>
+  <div className="row">
+    {currentTutorials.length > 0 &&
+      currentTutorials.map((t) => (
+        <div key={t._id} className="col-md-4 mb-4">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">{t.title}</h5>
+              <DescriptionPreview description={t.description} maxChars={100} />
+              {renderAttribute(t, "link")}
+              {renderAttribute(t, "price")}
+              {renderAttribute(t, "level")}
+              {renderAttribute(t, "date")}
+              {renderAttribute(t, "category")}
+              {renderAttribute(t, "video_link")}
+              {renderAttribute(t, "duration")}
+              {renderAttribute(t, "upload_date")}
+              {/* Add rendering for other attributes here */}
+              <button className="btn btn-warning" onClick={() => handleAddTutorial(t)}>
+                Add
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      ))}
+  </div>
+</div>
       <div className="container mt-4">
         {tutorials.length > tutorialsPerPage && (
           <ul className="pagination">
