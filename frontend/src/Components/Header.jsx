@@ -49,16 +49,7 @@ export default function Header() {
                   My Tutorials
                 </a>
               </li>
-              <li className="nav-item">
-                <a href="#faq" className="nav-link">
-                  FAQ
-                </a>
-              </li>
-              <li className="nav-item">
-                <a href="#download" className="nav-link">
-                  Download
-                </a>
-              </li>
+          
             </ul>
           </div>
           <div className="d-flex align-items-center">

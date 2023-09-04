@@ -66,7 +66,14 @@ export default function UserTutorials() {
             <button
               className="btn btn-sm btn-primary"
               onClick={toggleDescription}
-            >
+              style={{
+                display: 'block',
+                marginRight: '-10px',
+                backgroundColor: '#445a67',
+                color: '#fff',
+                borderColor: '#445a67',
+              }}>
+            
               {showFullDescription ? "Read Less" : "Read More"}
             </button>
           )}
@@ -118,7 +125,13 @@ export default function UserTutorials() {
               {renderAttribute(t.tutorial, "duration")}
               {renderAttribute(t.tutorial, "upload_date")}
               {/* Add rendering for other attributes here */}
-              <button className="btn btn-warning" onClick={() => handleAddTutorial(t)}>
+              <button className="btn btn-warning" onClick={() => handleAddTutorial(t)} style={{
+                backgroundColor: '#f67325',
+                color: '#fff',
+                borderColor: '#f67325',
+                display: 'block',
+                marginTop: '20px'
+              }}>
                 Add
               </button>
             </div>
