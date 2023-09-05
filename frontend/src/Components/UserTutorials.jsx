@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
-import Header from './Header';
+import HeaderL from './HeaderL';
 
 export default function UserTutorials() {
   const [ututorials, setUTutorials] = useState([]);
@@ -10,6 +10,7 @@ export default function UserTutorials() {
   const indexOfFirstTutorial = indexOfLastTutorial - tutorialsPerPage;
   const currentTutorials = ututorials.slice(indexOfFirstTutorial, indexOfLastTutorial);
   const { _id } = useParams(); // Get the user ID from the URL
+  
   const fetchTutos = async () => {
     try {
       const response = await fetch(`http://127.0.0.1:8000/userTuto/getUTT/${_id}`);
@@ -98,7 +99,7 @@ export default function UserTutorials() {
   };
   return (
     <div>
-      <Header />
+      <HeaderL/>
       <br></br>
       <br></br>
       <br></br>
@@ -124,15 +125,14 @@ export default function UserTutorials() {
               {renderAttribute(t.tutorial, "video_link")}
               {renderAttribute(t.tutorial, "duration")}
               {renderAttribute(t.tutorial, "upload_date")}
-              {/* Add rendering for other attributes here */}
-              <button className="btn btn-warning" onClick={() => handleAddTutorial(t)} style={{
+              <button className="btn btn-warning" onClick={() => handleDeleteTutorial(t._id)} style={{
                 backgroundColor: '#f67325',
                 color: '#fff',
                 borderColor: '#f67325',
                 display: 'block',
                 marginTop: '20px'
               }}>
-                Add
+                Delete
               </button>
             </div>
           </div>

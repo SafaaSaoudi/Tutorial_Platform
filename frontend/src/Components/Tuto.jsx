@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import Header from "./Header";
+import HeaderL from "./HeaderL";
+import { useParams } from 'react-router-dom';
+import axios from 'axios'; // Import axios
 
 export default function Tutorials() {
   const [tutorials, setTutorials] = useState([]);
@@ -12,12 +14,10 @@ export default function Tutorials() {
   const [selectedType, setSelectedType] = useState("");
   const [selectedDuration, setSelectedDuration] = useState("");
   const [selectedUploadDateFilter, setSelectedUploadDateFilter] = useState("All");
+  const { _id } = useParams(); // Get the user ID from the URL
 
-  const indexOfLastTutorial = currentPage * tutorialsPerPage;
-  const indexOfFirstTutorial = indexOfLastTutorial - tutorialsPerPage;
-  const currentTutorials = tutorials.slice(indexOfFirstTutorial, indexOfLastTutorial);
 
-  const isAuthenticated = false;
+  const isAuthenticated = !!localStorage.getItem("token");
 
   const fetchTutorials = async () => {
     try {
@@ -67,13 +67,21 @@ export default function Tutorials() {
     );
   };
 
-  const handleAddTutorial = async () => {
+  const handleAddTutorial = async (tutorial) => {
     if (!isAuthenticated) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Login first",
       });
+    }
+    else {
+      const response = await axios.post('http://127.0.0.1:8000/userTuto/addUT', {
+      utilisateurId: _id, // Replace with the user ID of the current user
+      tutorialId: tutorial._id
+    });
+    console.log(response.data);
+
     }
   };
 
@@ -162,8 +170,11 @@ export default function Tutorials() {
 
     return titleMatch && levelMatch && priceMatch && typeMatch;
   };
-
   const filteredTutorials = tutorials.filter(applyFilters);
+
+  const indexOfLastTutorial = currentPage * tutorialsPerPage;
+  const indexOfFirstTutorial = indexOfLastTutorial - tutorialsPerPage;
+  const currentTutorials = filteredTutorials.slice(indexOfFirstTutorial, indexOfLastTutorial);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -171,7 +182,7 @@ export default function Tutorials() {
 
   return (
     <div>
-      <Header />
+      <HeaderL/>
       <br />
       <br />
       <br />
@@ -261,8 +272,8 @@ export default function Tutorials() {
           )}
         </div>
         <div className="row">
-          {filteredTutorials.length > 0 &&
-            filteredTutorials.map((t) => (
+          {currentTutorials.length > 0 &&
+            currentTutorials.map((t) => (
               <div key={t._id} className="col-md-4 mb-4">
                 <div className="card">
                   <div className="card-body">

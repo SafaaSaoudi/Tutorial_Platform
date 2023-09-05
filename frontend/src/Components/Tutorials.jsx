@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import Header from "./Header";
 
@@ -12,10 +12,7 @@ export default function Tutorials() {
   const [selectedType, setSelectedType] = useState("");
   const [selectedDuration, setSelectedDuration] = useState("");
   const [selectedUploadDateFilter, setSelectedUploadDateFilter] = useState("All");
-
-  const indexOfLastTutorial = currentPage * tutorialsPerPage;
-  const indexOfFirstTutorial = indexOfLastTutorial - tutorialsPerPage;
-  const currentTutorials = tutorials.slice(indexOfFirstTutorial, indexOfLastTutorial);
+  
 
   const isAuthenticated = false;
 
@@ -162,8 +159,11 @@ export default function Tutorials() {
 
     return titleMatch && levelMatch && priceMatch && typeMatch;
   };
-
   const filteredTutorials = tutorials.filter(applyFilters);
+
+  const indexOfLastTutorial = currentPage * tutorialsPerPage;
+  const indexOfFirstTutorial = indexOfLastTutorial - tutorialsPerPage;
+  const currentTutorials = filteredTutorials.slice(indexOfFirstTutorial, indexOfLastTutorial);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -265,8 +265,8 @@ export default function Tutorials() {
           )}
         </div>
         <div className="row">
-          {filteredTutorials.length > 0 &&
-            filteredTutorials.map((t) => (
+          {currentTutorials.length > 0 &&
+            currentTutorials.map((t) => (
               <div key={t._id} className="col-md-4 mb-4">
                 <div className="card">
                   <div className="card-body">
