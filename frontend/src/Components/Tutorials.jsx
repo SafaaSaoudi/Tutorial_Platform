@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import Header from "./Header";
+import HeaderL from "./HeaderL";
+import { useParams } from 'react-router-dom';
+import axios from 'axios'; // Import axios
 
 export default function Tutorials() {
   const [tutorials, setTutorials] = useState([]);
@@ -12,9 +14,10 @@ export default function Tutorials() {
   const [selectedType, setSelectedType] = useState("");
   const [selectedDuration, setSelectedDuration] = useState("");
   const [selectedUploadDateFilter, setSelectedUploadDateFilter] = useState("All");
-  
+  const { _id } = useParams(); // Get the user ID from the URL
 
-  const isAuthenticated = false;
+
+  const isAuthenticated = !!localStorage.getItem("token");
 
   const fetchTutorials = async () => {
     try {
@@ -64,13 +67,21 @@ export default function Tutorials() {
     );
   };
 
-  const handleAddTutorial = async () => {
+  const handleAddTutorial = async (tutorial) => {
     if (!isAuthenticated) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Login first",
       });
+    }
+    else {
+      const response = await axios.post('http://127.0.0.1:8000/userTuto/addUT', {
+      utilisateurId: _id, // Replace with the user ID of the current user
+      tutorialId: tutorial._id
+    });
+    console.log(response.data);
+
     }
   };
 
@@ -171,7 +182,7 @@ export default function Tutorials() {
 
   return (
     <div>
-      <Header />
+      <HeaderL/>
       <br />
       <br />
       <br />
@@ -179,10 +190,7 @@ export default function Tutorials() {
       <br />
       <div className="container mt-4">
         <div className="text-center">
-          <h2 className="text-secondary" style={{
-            color: '#445a67',
-            marginTop: '-10px'
-          }}>Available Tutorials</h2>
+          <h2 className="text-secondary">Available Tutorials</h2>
         </div>
         <div className="input-group mb-3">
           <input
@@ -190,7 +198,7 @@ export default function Tutorials() {
             className="form-control"
             placeholder="Search by title..."
             onChange={(e) => setSearchText(e.target.value)}
-            value={searchText}
+            value={searchText} // Assurez-vous d'ajouter la valeur pour que l'input reflète l'état actuel
           />
           <button className="btn btn-secondary" onClick={resetFilters}>
             Reset Filters
@@ -242,7 +250,6 @@ export default function Tutorials() {
                 step="1"
                 value={selectedDuration}
                 onChange={(e) => setSelectedDuration(e.target.value)}
-                
               />
               <div>
                 <span >Duration: {selectedDuration} minutes</span>
