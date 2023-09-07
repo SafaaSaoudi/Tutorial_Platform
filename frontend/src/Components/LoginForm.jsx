@@ -15,12 +15,12 @@ import {
   Image,
   InputGroup,
   InputRightElement,
-  useToast, // Import useToast from @chakra-ui/react
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 import SignInimage from "../assets/SignInImage.png"; 
-import ReturnImage from "../assets/ReturnImage.png";// Update the path and case of the file name
+import ReturnImage from "../assets/ReturnImage.png";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function LoginForm() {
@@ -28,7 +28,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const toast = useToast(); // Use the useToast hook to create toast messages
+  const toast = useToast(); 
 
   const handleLogin = () => {
     if (!email || !password) {
@@ -57,12 +57,12 @@ export default function LoginForm() {
           if (response.data.msg === "login success") {
             const { token, role, _id } = response.data.user;
             localStorage.setItem("token", token);
-            localStorage.setItem("role", role); // Store the user's role in local storage
+            localStorage.setItem("role", role); 
 
             if (role === "admin") {
-              navigate(`/Admin/${_id}`); // Redirect to the admin dashboard if the role is admin
+              navigate(`/Admin/${_id}`); 
             } else {
-              // Redirect to the user dashboard for any other role (default is 'user')
+              
               navigate(`/Tuto/${_id}`);
             }
           }

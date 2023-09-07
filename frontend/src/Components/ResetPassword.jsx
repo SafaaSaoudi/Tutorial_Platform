@@ -27,13 +27,13 @@ import {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const toast = useToast();
-    const { code } = useParams(); // Utilisez useParams pour obtenir le code à partir de l'URL
+    const { code } = useParams(); 
   
     const handleSubmit = async (e) => {
       e.preventDefault();
   
       try {
-        // Envoyez le code de réinitialisation et le nouveau mot de passe au backend
+        
         await axios.put("http://127.0.0.1:8000/reset-password", { code, password });
   
         toast({

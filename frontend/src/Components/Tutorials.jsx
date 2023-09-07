@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import HeaderL from "./HeaderL";
+import Header from "./Header";
 import { useParams } from 'react-router-dom';
-import axios from 'axios'; // Import axios
+import axios from 'axios'; 
 
 export default function Tutorials() {
   const [tutorials, setTutorials] = useState([]);
@@ -14,7 +14,7 @@ export default function Tutorials() {
   const [selectedType, setSelectedType] = useState("");
   const [selectedDuration, setSelectedDuration] = useState("");
   const [selectedUploadDateFilter, setSelectedUploadDateFilter] = useState("All");
-  const { _id } = useParams(); // Get the user ID from the URL
+  const { _id } = useParams(); 
 
 
   const isAuthenticated = !!localStorage.getItem("token");
@@ -77,7 +77,7 @@ export default function Tutorials() {
     }
     else {
       const response = await axios.post('http://127.0.0.1:8000/userTuto/addUT', {
-      utilisateurId: _id, // Replace with the user ID of the current user
+      utilisateurId: _id, 
       tutorialId: tutorial._id
     });
     console.log(response.data);
@@ -89,7 +89,7 @@ export default function Tutorials() {
     fetchTutorials();
   }, []);
 
-  // Fonction pour réinitialiser les filtres à leurs valeurs par défaut
+  
   const resetFilters = () => {
     setSearchText("");
     setSelectedLevel("");
@@ -182,7 +182,7 @@ export default function Tutorials() {
 
   return (
     <div>
-      <HeaderL/>
+      <Header/>
       <br />
       <br />
       <br />

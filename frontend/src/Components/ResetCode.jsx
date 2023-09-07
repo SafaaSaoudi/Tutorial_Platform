@@ -18,7 +18,7 @@ import {
     useToast, 
   } from "@chakra-ui/react";
   import { useState } from "react";
-  import axios from "axios"; // Importez le package axios pour envoyer des requêtes HTTP
+  import axios from "axios"; 
   import ResetCodeImage from "../assets/ResetCode.png";
   import ReturnImage from "../assets/ReturnImage.png";
   import { useNavigate, Link } from "react-router-dom";
@@ -31,7 +31,7 @@ import {
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        // Envoyez le code de réinitialisation saisi par l'utilisateur au backend pour vérification
+        
         await axios.post('http://127.0.0.1:8000/reset-code', { code });
   
         toast({
@@ -42,7 +42,7 @@ import {
           isClosable: true,
         });
   
-        // Rediriger l'utilisateur vers la page de réinitialisation du mot de passe avec le code saisi
+        
         navigate(`/reset-password/${code}`);
       } catch (error) {
         toast({
@@ -88,9 +88,10 @@ import {
                     query="password"
                     styles={{ rounded: "full",  bg: "#FF9A60" }}
                   >
-                  Please enter it here to proceed with resetting your password
+                  Please enter it here to reset your password.
                   </Highlight>
                 </Heading>
+                
                   <center>
                     <Image
                       boxSize="380px"

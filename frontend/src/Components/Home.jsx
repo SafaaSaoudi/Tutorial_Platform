@@ -22,7 +22,7 @@ import '../assets/css/swipe.css';
         <header className="header-global" id="home">
         <nav id="navbar-main" aria-label="Primary navigation" className="navbar navbar-main navbar-expand-lg navbar-theme-primary headroom navbar-light navbar-theme-secondary">
         <div className="container position-relative">
-            <a className="navbar-brand mr-lg-4" href="./index.html">
+            <a className="navbar-brand mr-lg-4" href="http://127.0.0.1:5173/">
             <img className="navbar-brand-dark" src={logoLight} alt="Logo light" />
             <img className="navbar-brand-light" src={logoDark} alt="Logo dark" />
             </a>
@@ -30,7 +30,7 @@ import '../assets/css/swipe.css';
                 <div className="navbar-collapse-header">
                     <div className="row">
                         <div className="col-6 collapse-brand">
-                            <a href="./index.html">
+                            <a href="http://127.0.0.1:5173/">
                             <img src={logoDark} alt="Logo dark" />
                             </a>
                         </div>
