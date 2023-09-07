@@ -9,6 +9,7 @@ import ForgetPassword from './Components/ForgetPassword';
 import ResetPassword from './Components/ResetPassword';
 import ResetCode from './Components/ResetCode';
 import Home from './Components/Home';
+import PerformanceTest from './Components/Test/PerformanceTest';
 function App() {
   return (
     <>
@@ -22,7 +23,8 @@ function App() {
         <Route path="/UserTutorials/:_id" element={<UserTutorials />} />
         <Route path="/Tutorials" element={<Tutorials />} />
         <Route path="/Tuto/:_id" element={<Tuto />} />
-        <Route path="/SignUp" element={<SignUp />}></Route>
+        <Route path="/SignUp" element={ <SignUp /> }></Route>
+        <Route path="/test" element={<PerformanceTest/>}></Route>
       </Routes>
     </>
   );

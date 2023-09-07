@@ -6,16 +6,23 @@ const cors = require('cors');
 /* GET user DB. */
 router.use(cors());
 
-router.get('/getT',async function(req, res, next) {
+router.get( '/getT', async function ( req, res, next )
+{
+  const startTime = process.hrtime.bigint();
     await Courses.find()
       .then(data => {
-        res.json(data);
+        res.json( data );
+
       })
       .catch(error => {
         console.error(error);
         // Handle the error
         res.status(500).send('Internal Server Error');
-      });
+      } );
+      const endTime = process.hrtime.bigint(); 
+      const elapsedTime = endTime - startTime; 
+
+console.log(`Temps écoulé : ${elapsedTime } millisecondes`); 
   });
 
 

@@ -3,7 +3,8 @@ import Swal from "sweetalert2";
 import HeaderL from "./HeaderL";
 import { useParams } from 'react-router-dom';
 import axios from 'axios'; // Import axios
-
+import PerformanceTest from "./Test/PerformanceTest";
+import { Button } from "@chakra-ui/react";
 export default function Tutorials() {
   const [tutorials, setTutorials] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,24 +14,41 @@ export default function Tutorials() {
   const [selectedPrice, setSelectedPrice] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [selectedDuration, setSelectedDuration] = useState("");
-  const [selectedUploadDateFilter, setSelectedUploadDateFilter] = useState("All");
+  const [selectedUploadDateFilter, setSelectedUploadDateFilter] =
+    useState("All");
   const { _id } = useParams(); // Get the user ID from the URL
 
+  const handleButtonClick = () => {
+    // Code à mesurer en termes de performance
+    const startTime = performance.now();
 
+    // Effectuez ici les opérations que vous souhaitez mesurer
+
+    const endTime = performance.now();
+    const elapsedTime = endTime - startTime;
+    console.log(`Temps écoulé : ${elapsedTime} millisecondes`);
+  };
   const isAuthenticated = !!localStorage.getItem("token");
 
   const fetchTutorials = async () => {
     try {
+      //test d'efficacité
+      const startTime = performance.now();
+
       console.log("Fetching tutorials...");
       const response = await fetch("http://localhost:8000/tuto/getT");
       console.log("Response status:", response.status);
-
+      const endTime = performance.now();
+      const elapsedTime = endTime - startTime;
+      console.log(`Temps écoulé : ${elapsedTime} millisecondes`);
+      // End Calcul test
       if (!response.ok) {
         console.error("Failed to fetch tutorials.");
         return;
       }
 
       const data = await response.json();
+
       console.log("Data received:", data);
       setTutorials(data);
     } catch (error) {
@@ -45,20 +63,25 @@ export default function Tutorials() {
       setShowFullDescription(!showFullDescription);
     };
 
-    const truncatedDescription = description ? description.slice(0, maxChars) : "";
+    const truncatedDescription = description
+      ? description.slice(0, maxChars)
+      : "";
 
     return (
       <div>
         <div className="d-flex justify-content-between align-items-center">
           <p>{showFullDescription ? description : truncatedDescription}</p>
           {description && description.length > maxChars && (
-            <button className="btn btn-sm btn-primary" onClick={toggleDescription} style={{
-              display: 'block',
-              marginRight: '-10px',
-              backgroundColor: '#445a67',
-              color: '#fff',
-              borderColor: '#445a67',
-            }}>
+            <button
+              className="btn btn-sm btn-primary"
+              onClick={toggleDescription}
+              style={{
+                display: "block",
+                marginRight: "-10px",
+                backgroundColor: "#445a67",
+                color: "#fff",
+                borderColor: "#445a67",
+              }}>
               {showFullDescription ? "Read Less" : "Read More"}
             </button>
           )}
@@ -74,14 +97,15 @@ export default function Tutorials() {
         title: "Oops...",
         text: "Login first",
       });
-    }
-    else {
-      const response = await axios.post('http://127.0.0.1:8000/userTuto/addUT', {
-      utilisateurId: _id, // Replace with the user ID of the current user
-      tutorialId: tutorial._id
-    });
-    console.log(response.data);
-
+    } else {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/userTuto/addUT",
+        {
+          utilisateurId: _id, // Replace with the user ID of the current user
+          tutorialId: tutorial._id,
+        }
+      );
+      console.log(response.data);
     }
   };
 
@@ -125,47 +149,49 @@ export default function Tutorials() {
   };
 
   const applyFilters = (tutorial) => {
-    const titleMatch = tutorial.title.toLowerCase().includes(searchText.toLowerCase());
+    const titleMatch = tutorial.title
+      .toLowerCase()
+      .includes(searchText.toLowerCase());
     const levelMatch = selectedLevel === "" || tutorial.level === selectedLevel;
     const priceMatch = selectedPrice === "" || tutorial.price === selectedPrice;
     const typeMatch = selectedType === "" || tutorial.type === selectedType;
 
     if (selectedType === "video") {
-      const videoLinkMatch = tutorial.video_link?.startsWith("https://www.youtube.com/");
+      const videoLinkMatch = tutorial.video_link?.startsWith(
+        "https://www.youtube.com/"
+      );
 
       return (
         titleMatch &&
         levelMatch &&
         priceMatch &&
         videoLinkMatch &&
-        (selectedDuration === "" || parseFloat(formatDuration(tutorial.duration)) <= parseFloat(selectedDuration)) &&
+        (selectedDuration === "" ||
+          parseFloat(formatDuration(tutorial.duration)) <=
+            parseFloat(selectedDuration)) &&
         (selectedUploadDateFilter === "All" ||
-          (selectedUploadDateFilter === "Older" && new Date(tutorial.upload_date).getFullYear() <= 2015) ||
-          (selectedUploadDateFilter === "Old" && new Date(tutorial.upload_date).getFullYear() <= 2020) ||
-          (selectedUploadDateFilter === "Recent" && new Date(tutorial.upload_date).getFullYear() === 2023))
+          (selectedUploadDateFilter === "Older" &&
+            new Date(tutorial.upload_date).getFullYear() <= 2015) ||
+          (selectedUploadDateFilter === "Old" &&
+            new Date(tutorial.upload_date).getFullYear() <= 2020) ||
+          (selectedUploadDateFilter === "Recent" &&
+            new Date(tutorial.upload_date).getFullYear() === 2023))
       );
     } else if (selectedType === "document") {
-      const documentLinkMatch = tutorial.link?.startsWith("https://www.w3schools.com/");
-
-      return (
-        titleMatch &&
-        levelMatch &&
-        priceMatch &&
-        documentLinkMatch
+      const documentLinkMatch = tutorial.link?.startsWith(
+        "https://www.w3schools.com/"
       );
+
+      return titleMatch && levelMatch && priceMatch && documentLinkMatch;
     } else if (selectedType === "course") {
-      const courseLinkMatch = tutorial.link?.startsWith("https://alison.com/") ||
+      const courseLinkMatch =
+        tutorial.link?.startsWith("https://alison.com/") ||
         tutorial.link?.startsWith("https://www.theodinproject.com/") ||
         tutorial.link?.startsWith("https://www.simplilearn.com/") ||
         tutorial.link?.startsWith("https://www.sololearn.com/") ||
         tutorial.link?.startsWith("https://www.udemy.com/courses/");
 
-      return (
-        titleMatch &&
-        levelMatch &&
-        priceMatch &&
-        courseLinkMatch
-      );
+      return titleMatch && levelMatch && priceMatch && courseLinkMatch;
     }
 
     return titleMatch && levelMatch && priceMatch && typeMatch;
@@ -174,7 +200,10 @@ export default function Tutorials() {
 
   const indexOfLastTutorial = currentPage * tutorialsPerPage;
   const indexOfFirstTutorial = indexOfLastTutorial - tutorialsPerPage;
-  const currentTutorials = filteredTutorials.slice(indexOfFirstTutorial, indexOfLastTutorial);
+  const currentTutorials = filteredTutorials.slice(
+    indexOfFirstTutorial,
+    indexOfLastTutorial
+  );
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -182,7 +211,7 @@ export default function Tutorials() {
 
   return (
     <div>
-      <HeaderL/>
+      <HeaderL />
       <br />
       <br />
       <br />
@@ -209,8 +238,7 @@ export default function Tutorials() {
             <select
               className="form-select"
               value={selectedLevel}
-              onChange={(e) => setSelectedLevel(e.target.value)}
-            >
+              onChange={(e) => setSelectedLevel(e.target.value)}>
               <option value="">Select Level</option>
               <option value="Beginner">Beginner</option>
               <option value="Mixed">Mixed</option>
@@ -221,8 +249,7 @@ export default function Tutorials() {
             <select
               className="form-select"
               value={selectedPrice}
-              onChange={(e) => setSelectedPrice(e.target.value)}
-            >
+              onChange={(e) => setSelectedPrice(e.target.value)}>
               <option value="">Select Price</option>
               <option value="Free">Free</option>
               <option value="Free & Paid Courses">Free & Paid Courses</option>
@@ -232,8 +259,7 @@ export default function Tutorials() {
             <select
               className="form-select"
               value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-            >
+              onChange={(e) => setSelectedType(e.target.value)}>
               <option value="">Select Type</option>
               <option value="video">Video</option>
               <option value="course">Course</option>
@@ -241,7 +267,7 @@ export default function Tutorials() {
             </select>
           </div>
           {selectedType === "video" && (
-            <div className="col-md-4 mb-4" >
+            <div className="col-md-4 mb-4">
               <input
                 type="range"
                 className="form-range"
@@ -252,7 +278,7 @@ export default function Tutorials() {
                 onChange={(e) => setSelectedDuration(e.target.value)}
               />
               <div>
-                <span >Duration: {selectedDuration} minutes</span>
+                <span>Duration: {selectedDuration} minutes</span>
               </div>
             </div>
           )}
@@ -261,8 +287,7 @@ export default function Tutorials() {
               <select
                 className="form-select"
                 value={selectedUploadDateFilter}
-                onChange={(e) => setSelectedUploadDateFilter(e.target.value)}
-              >
+                onChange={(e) => setSelectedUploadDateFilter(e.target.value)}>
                 <option value="All">All Upload Dates</option>
                 <option value="Older">Older</option>
                 <option value="Old">Old</option>
@@ -278,7 +303,10 @@ export default function Tutorials() {
                 <div className="card">
                   <div className="card-body">
                     <h5 className="card-title">{t.title}</h5>
-                    <DescriptionPreview description={t.description} maxChars={100} />
+                    <DescriptionPreview
+                      description={t.description}
+                      maxChars={100}
+                    />
                     {renderAttribute(t, "link")}
                     {renderAttribute(t, "price")}
                     {renderAttribute(t, "level")}
@@ -287,13 +315,16 @@ export default function Tutorials() {
                     {renderAttribute(t, "video_link")}
                     {renderAttribute(t, "duration")}
                     {renderAttribute(t, "upload_date")}
-                    <button className="btn btn-warning" onClick={() => handleAddTutorial(t)} style={{
-                      backgroundColor: '#f67325',
-                      color: '#fff',
-                      borderColor: '#f67325',
-                      display: 'block',
-                      marginTop: '20px'
-                    }}>
+                    <button
+                      className="btn btn-warning"
+                      onClick={() => handleAddTutorial(t)}
+                      style={{
+                        backgroundColor: "#f67325",
+                        color: "#fff",
+                        borderColor: "#f67325",
+                        display: "block",
+                        marginTop: "20px",
+                      }}>
                       Add
                     </button>
                   </div>
@@ -305,16 +336,20 @@ export default function Tutorials() {
       <div className="container mt-4">
         {tutorials.length > tutorialsPerPage && (
           <ul className="pagination">
-            {Array.from({ length: Math.ceil(tutorials.length / tutorialsPerPage) }, (_, index) => (
-              <li className="page-item" key={index + 1}>
-                <button
-                  className={`page-link ${currentPage === index + 1 ? "active" : ""}`}
-                  onClick={() => paginate(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              </li>
-            ))}
+            {Array.from(
+              { length: Math.ceil(tutorials.length / tutorialsPerPage) },
+              (_, index) => (
+                <li className="page-item" key={index + 1}>
+                  <button
+                    className={`page-link ${
+                      currentPage === index + 1 ? "active" : ""
+                    }`}
+                    onClick={() => paginate(index + 1)}>
+                    {index + 1}
+                  </button>
+                </li>
+              )
+            )}
           </ul>
         )}
       </div>
