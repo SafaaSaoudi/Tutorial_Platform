@@ -34,7 +34,7 @@ function Params(props) {
   return (
     <div className="paramsList">
       {isLoading ? (
-        <Spinner className="spinner" color="lightgreen" speed="1s" emptyColor="lightgrey" thickness="2px"/>
+        <Spinner className="spinner" color="orange" speed="1s" emptyColor="lightgrey" thickness="2px"/>
       ) : params.length !== 0 ? (
         params.map((e) => <Param key={e._id} param={e} delete={deleteP} />)
       ) : (

@@ -5,6 +5,8 @@
   gap: 20px;
 }
 .sidebar {
+  color: white;
+  background-color: #445a67;
   box-shadow: 0 0 1px 0px rgb(180, 180, 180);
   border: 1px solid transparent;
   box-shadow: 0 0 10px 0px rgb(180, 180, 180);
@@ -15,18 +17,13 @@
   justify-content: space-between;
   gap: 20px;
 }
-.logo {
-  font-size: 25px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
+
 .sidebar-items {
   margin-top: 50px;
   padding-inline: 20px;
 }
 .btn-params:hover {
-  color: blue;
+  color: orange;
 }
 
 .btn-logout:hover {
@@ -34,4 +31,9 @@
 }
 .sidebar-items-end {
   padding-inline: 10px;
+}
+.logo-admin {
+margin-top: -40px;
+scale: 1.5;
+margin-left: 15px;
 }

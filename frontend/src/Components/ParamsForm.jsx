@@ -29,7 +29,7 @@ function ParamsForm(props) {
           }}
           placeholder="Parameter Name"
         />
-        <Button colorScheme="green" type="submit">
+        <Button colorScheme="orange" type="submit">
           Submit
         </Button>
       </form>

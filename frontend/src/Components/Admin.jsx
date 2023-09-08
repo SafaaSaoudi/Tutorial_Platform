@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ParamsContainer from "./ParamsContainer";
-import { SearchIcon } from "@chakra-ui/icons";
 import "./styleDashboard.css";
-
+import logo from "../assets/img/logo.png";
 const Admin = () => {
   const navigate = useNavigate();
 
@@ -24,10 +23,7 @@ const Admin = () => {
     <div className="dashboard">
       <div className="sidebar">
         <div>
-          <div className="logo">
-            <SearchIcon color="black" />
-            <h1>Tuto App</h1>
-          </div>
+          <img src={logo} alt="Logo" className="logo-admin"/>
           <div className="sidebar-items">
             <button className="btn-params">Research Parameters</button>
           </div>
